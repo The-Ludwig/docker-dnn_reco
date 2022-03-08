@@ -12,6 +12,19 @@ To start a container and log in (icetray environment should be loaded, if not, e
 docker run -it theludwig/dnn_reco
 ```
 
+## Singularity 
+To build a singularity sandbox container with this image run: 
+
+```sh 
+sudo SINGULARITY_TMPDIR=/path/with/enough/space/which/is/about/10/gb singularity build --sandbox ./dnn_reco.sif docker://theludwig/dnn_reco
+```
+To log on to the container run: 
+```sh 
+sudo singularity shell --no-home --writable dnn_reco.sif
+```
+
+(if you don't specify `--no-home`, dnn_reco won't be available in `/root`, as it gets overwritten by whatever you have there) 
+
 
 ## Build 
 
