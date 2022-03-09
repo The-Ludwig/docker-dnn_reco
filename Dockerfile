@@ -1,21 +1,5 @@
 FROM icecube/icetray:combo-stable-install as install-tf
 
-# build NewNuFlux
-RUN svn co http://code.icecube.wisc.edu/svn/sandbox/cweaver/NewNuFlux /root/combo/src/NewNuFlux \
-           ***REMOVED*** --no-auth-cache
-
-WORKDIR /root/combo/build
-RUN cmake /root/combo/src \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DINSTALL_TOOL_LIBS=OFF \
-      -DUSE_GFILT=OFF \
-      -DCMAKE_INSTALL_PREFIX=/usr/local/icetray \
-      -DUSE_PYTHON3=OFF \
-    && make -j4
-
-# install icetray
-RUN make install
-
 ### now make the tensorflow image
 
 FROM icecube/icetray:combo-stable-cuda11.1 as dnn_reco
