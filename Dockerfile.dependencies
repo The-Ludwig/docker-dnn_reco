@@ -1,0 +1,35 @@
+# This stage is needed to copy the source of icetray 
+# (to install git dependencies via pip)
+FROM icecube/icetray:combo-stable-install AS install-tf
+
+# Now we install tensorflow to basically set up this image
+# to a point where the user can easily install dnn_reco 
+# (e.g. from a bound folder)
+FROM icecube/icetray:combo-stable-cuda11.1 AS dnn_reco
+
+WORKDIR /root
+
+# stage in icetray build from the previous build
+COPY --from=install-tf /usr/local/icetray /usr/local/icetray
+# stage in icetray source from the previous build 
+COPY --from=install-tf /root/combo /root/combo
+
+# set I3 realted environment variables 
+ENV I3_SRC=/root/combo/src
+ENV I3_BUILD=/usr/local/icetray
+
+# install tensorflow (right version for dnn_reco) and additional dependencies
+# had to explicitly install MCEq with version, since newer versions resultet in an error
+RUN pip3 install pybind11 \
+			     tensorflow==2.3.0 \
+				 tensorflow_probability==0.11.1 \
+				 MCEq[MKL]==1.1.1
+
+# install additional dependencies
+RUN pip3 install git+git://github.com/icecube/TFScripts.git \
+                 git+git://github.com/icecube/ic3-data.git \
+                 git+git://github.com/icecube/ic3-labels.git
+
+# provide the entry pint to run commands
+ENTRYPOINT ["/bin/bash", "/usr/local/icetray/env-shell.sh", "exec"]
+CMD ["/bin/bash"]

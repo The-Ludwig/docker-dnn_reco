@@ -1,37 +1,21 @@
-FROM icecube/icetray:combo-stable-install as install-tf
+From theludwig/dnn_reco:dependencies AS dependencies
 
-### now make the tensorflow image
+RUN useradd --create-home dnn
+# set the password of dnn to reco
+RUN echo 'dnn:reco' | chpasswd
 
-FROM icecube/icetray:combo-stable-cuda11.1 as dnn_reco
-
-MAINTAINER IceCube <developers@icecube.wisc.edu>
-
-WORKDIR /root
-
-# stage in icetray from the previous build
-COPY --from=install-tf /usr/local/icetray /usr/local/icetray
-
-# stage in icetray source from the previous build 
-COPY --from=install-tf /root/combo /root/combo
-
-# install tensorflow (right version for dnn_reco) and additional dependencies
-RUN pip3 install pybind11 tensorflow==2.3.0 tensorflow_probability==0.11.1 MCEq[MKL]==1.1.1
-
-# set I3 realted environment variables 
-ENV I3_SRC=/root/combo/src
-ENV I3_BUILD=/usr/local/icetray
-
-# install additional dependencies
-RUN pip3 install git+git://github.com/icecube/TFScripts.git \
-                 git+git://github.com/icecube/ic3-data.git \
-                 git+git://github.com/icecube/ic3-labels.git
+# set user to dnn 
+USER dnn
+WORKDIR /home/dnn
 
 # install dnn_reco 
-RUN git clone https://github.com/The-Ludwig/dnn_reco.git \
-    && pip3 install -e dnn_reco
+RUN git clone https://github.com/icecube/dnn_reco.git \
+    && pip3 install --user --editable dnn_reco
 
-# set the standard dnn env variables 
-ENV DNN_HOME=/root
+# set the standard dnn env variable 
+ENV DNN_HOME=/home/dnn
+RUN mkdir --parents /home/dnn/configs
+ENV CONFIG_DIR=/home/dnn/configs
 
 # provide the entry point to run commands
 ENTRYPOINT ["/bin/bash", "/usr/local/icetray/env-shell.sh", "exec"]
