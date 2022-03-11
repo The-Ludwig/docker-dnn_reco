@@ -15,8 +15,8 @@ COPY --from=install-tf /usr/local/icetray /usr/local/icetray
 COPY --from=install-tf /root/combo /root/combo
 
 # set I3 realted environment variables 
-ENV I3_SRC=/root/combo/src
-ENV I3_BUILD=/usr/local/icetray
+ENV I3_SRC=/root/combo/src \
+    I3_BUILD=/usr/local/icetray
 
 # install tensorflow (right version for dnn_reco) and additional dependencies
 # had to explicitly install MCEq with version, since newer versions resultet in an error
