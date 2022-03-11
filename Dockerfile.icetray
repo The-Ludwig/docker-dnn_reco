@@ -1,0 +1,12 @@
+ARG TAG
+FROM theludwig/dnn_reco:$TAG
+
+# Set the right env variables to load icetray 
+ENV PYTHONPATH="/usr/local/icetray/lib:${PYTHONPATH}" \
+    LD_LIBRARY_PATH="/usr/local/icetray/lib:/usr/local/icetray/lib/tools:${LD_LIBRARY_PATH}" \ 
+	DYLD_LIBRARY_PATH="/usr/local/icetray/lib:/usr/local/icetray/lib/tools:${DYLD_LIBRARY_PATH}" \
+	PATH="/usr/local/icetray/bin:$PATH"
+
+# provide the entry point to run commands
+ENTRYPOINT ["/bin/bash", "/usr/local/icetray/env-shell.sh", "exec"]
+CMD ["/bin/bash"]
