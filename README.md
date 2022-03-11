@@ -1,22 +1,28 @@
 # [Docker dnn_reco](https://hub.docker.com/r/theludwig/dnn_reco)
-Dockerfile to create the most basic dnn_reco environment. You can find some images on [docker-hub](https://hub.docker.com/r/theludwig/dnn_reco).
+Dockerfiles to create some basic dnn_reco environment. You can find images on [docker-hub](https://hub.docker.com/r/theludwig/dnn_reco).
 
 My template was [this icetray Dockerfile](https://github.com/WIPACrepo/docker-icecube-icetray/blob/master/ubuntu20.04/combo/stable/Dockerfile_tensorflow2.4.1). 
 The dnn_reco repository can be found [here](https://github.com/icecube/dnn_reco).
 
-## The images 
+## The tags
 
-#### theludwig/dnn_reco:base (=theludwig/dnn_reco:latest)
+#### base / latest
 The image from `Dockerfile` has dnn_reco already installed. You are logged in as user `dnn` with password `reco` and you will find 
 the dnn_reco repository in your homefolder (`/home/dnn`).
-#### theludwig/dnn_reco:dependencies (=theludwig/dnn_reco:dependencies)
+
+#### dependencies
 The image from `Dockerfile.dependencies` only has the prerequisites for `dnn_reco` installed. This is optimal if you want to bind a 
 folder and install dnn_reco yourself. This is for example the case if your DNN_HOME folder already exists elsewhere or you simply want 
-to keep it. 
+to keep it.
+
+#### icetray
+The tags with icetray in the name have the correct environment variables, so that icetray is already loaded. 
+
 
 ## Usage
 
-To start a container and log in (icetray environment should be loaded, if not, execute/have a look at `/usr/local/icetray/env-shell.sh` or `$I3_BUILD/env_shell.sh`):
+To start a container and log in (if you use an `icetray` tag, `icetray` environment is loaded, if not, execute `/usr/local/icetray/env-shell.sh` 
+*in its folder* (or `$I3_BUILD/env_shell.sh`):
 ```sh
 docker run -it theludwig/dnn_reco
 ```
