@@ -30,6 +30,9 @@ RUN pip3 install git+git://github.com/icecube/TFScripts.git \
                  git+git://github.com/icecube/ic3-data.git \
                  git+git://github.com/icecube/ic3-labels.git
 
+# install hdf5-tools as that will be most probably needed 
+RUN apt install -y hdf5-tools
+
 # provide the entry pint to run commands
 ENTRYPOINT ["/bin/bash", "/usr/local/icetray/env-shell.sh", "exec"]
 CMD ["/bin/bash"]
